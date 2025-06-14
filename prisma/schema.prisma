@@ -13,14 +13,43 @@ model User {
   email String  @unique
   name  String
   password String
-  image String?
+  profile_picture String?
+
+  boards UserOnBoard[]
 }
 
-// model Post {
-//   id        Int     @id @default(autoincrement())
-//   title     String
-//   content   String?
-//   published Boolean @default(false)
-//   authorId  Int
-//   author    User    @relation(fields: [authorId], references: [id])
-// }
+model Board {
+  id Int @id @default(autoincrement())
+  title String
+
+  members UserOnBoard[]
+  tasks Task[]
+}
+
+model UserOnBoard {
+  id Int @id @default(autoincrement())
+
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+
+  boardId Int
+  board Board @relation(fields: [boardId], references: [id])
+
+  created_at DateTime @default(now())
+  is_owner Boolean @default(false)
+}
+
+model Task {
+  id Int @id @default(autoincrement())
+
+  title String
+  description String?
+
+  priority Int @default(0)
+  finished Boolean @default(false)
+
+  created_at DateTime @default(now())
+
+  boardId Int 
+  board Board @relation(fields: [boardId], references: [id])
+}
