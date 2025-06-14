@@ -157,7 +157,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\mabba\\Desktop\\IFFar\\Programação Web\\todo-list-iffar\\app\\generated\\prisma",
+      "value": "D:\\DEV WEB\\todo-list-iffar\\app\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -171,11 +171,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\mabba\\Desktop\\IFFar\\Programação Web\\todo-list-iffar\\prisma\\schema.prisma",
+    "sourceFilePath": "D:\\DEV WEB\\todo-list-iffar\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
@@ -185,6 +185,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -195,7 +196,7 @@ const config = {
   },
   "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id              Int     @id @default(autoincrement())\n  email           String  @unique\n  name            String\n  password        String\n  profile_picture String?\n\n  boards UserOnBoard[]\n}\n\nmodel Board {\n  id    Int    @id @default(autoincrement())\n  title String\n\n  members UserOnBoard[]\n  tasks   Task[]\n}\n\nmodel UserOnBoard {\n  id Int @id @default(autoincrement())\n\n  userId Int\n  user   User @relation(fields: [userId], references: [id])\n\n  boardId Int\n  board   Board @relation(fields: [boardId], references: [id])\n\n  created_at DateTime @default(now())\n  is_owner   Boolean  @default(false)\n}\n\nmodel Task {\n  id Int @id @default(autoincrement())\n\n  title       String\n  description String?\n\n  priority Int     @default(0)\n  finished Boolean @default(false)\n\n  created_at DateTime @default(now())\n\n  boardId Int\n  board   Board @relation(fields: [boardId], references: [id])\n}\n",
   "inlineSchemaHash": "4297bbd5ab05db97e4b37ce8b6ea438eee8f2c58d3c808e0713406d2fa1a4721",
-  "copyEngine": false
+  "copyEngine": true
 }
 
 const fs = require('fs')
@@ -232,3 +233,9 @@ const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
+// file annotations for bundling tools to include these files
+path.join(__dirname, "query_engine-windows.dll.node");
+path.join(process.cwd(), "app/generated/prisma/query_engine-windows.dll.node")
+// file annotations for bundling tools to include these files
+path.join(__dirname, "schema.prisma");
+path.join(process.cwd(), "app/generated/prisma/schema.prisma")
