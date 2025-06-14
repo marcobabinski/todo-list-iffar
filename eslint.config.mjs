@@ -11,6 +11,11 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  // Adiciona um novo objeto de configuração para suas regras personalizadas
+  {
+    // A propriedade `ignores` aceita um array de padrões glob
+    ignores: ["./app/generated/**"],
+  },
 ];
 
 export default eslintConfig;
