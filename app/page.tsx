@@ -13,7 +13,7 @@ export default async function Home() {
   });
 
   return (
-    <div className="...">
+    <div className="h-screen flex flex-col items-center justify-center">
       <UsersList users={users} />
     </div>
   );
