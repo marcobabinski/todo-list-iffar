@@ -51,5 +51,5 @@ model Task {
   created_at DateTime @default(now())
 
   boardId Int 
-  board Board @relation(fields: [boardId], references: [id])
+  board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
 }
