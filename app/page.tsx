@@ -1,20 +1,16 @@
+import BoardList from "@/components/BoardList";
 import UsersList from "@/components/users-list";
 import prisma from "@/lib/prisma";
 
 export default async function Home() {
-  const users = await prisma.user.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      profile_picture: true,
-      password: true,
-    },
-  });
+  const boards = await prisma.board.findMany();
 
+  if (!boards || boards.length === 0) return (
+    <div className="text-slate-500 text-italic">Nenhuma board encontrada.</div>
+  )
   return (
-    <div className="h-screen flex flex-col items-center justify-center">
-      <UsersList users={users} />
+    <div className="h-screen flex flex-col">
+      <BoardList boards={boards} />
     </div>
   );
 }
