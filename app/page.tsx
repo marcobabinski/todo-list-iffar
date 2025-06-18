@@ -9,7 +9,7 @@ export default async function Home() {
     <div className="text-slate-500 text-italic">Nenhuma board encontrada.</div>
   )
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen bg-pattern flex flex-col">
       <BoardList boards={boards} />
     </div>
   );

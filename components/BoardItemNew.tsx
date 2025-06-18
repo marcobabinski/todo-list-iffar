@@ -4,7 +4,7 @@ import { PlusCircle } from "lucide-react"
 
 export default function BoardItemNew() {
     return (
-        <Card className="w-sm h-min mt-9 border-slate-300 border-dashed border-2 opacity-50 hover:opacity-100 hover:-translate-y-1 cursor-pointer transition inline-flex items-center justify-center flex-row gap-2 text-slate-300">
+        <Card className="w-sm h-min mt-9 bg-old-lace-100 border-old-lace-400 border-dashed border-2 opacity-50 hover:opacity-100 hover:-translate-y-1 cursor-pointer transition inline-flex items-center justify-center flex-row gap-2 text-old-lace-400">
             <PlusCircle /> Criar nova board
         </Card>
     )
