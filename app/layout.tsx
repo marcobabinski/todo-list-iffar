@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/navbar/Navbar";
+import { BoardProvider } from "@/context/BoardsContext";
+import prisma from "@/lib/prisma";
+import { Toaster } from "@/components/ui/sonner";
+import { Providers } from "@/components/Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,18 +22,25 @@ export const metadata: Metadata = {
   description: "Todo List Projeto",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  const boards = await prisma.board.findMany();
+
   return (
     <html lang="pt-BR">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        {children}
+        <Providers>
+          <BoardProvider initialBoards={boards}>
+            <Navbar />
+            {children}
+          </BoardProvider>
+        </Providers>
+        <Toaster />
       </body>
     </html>
   );
