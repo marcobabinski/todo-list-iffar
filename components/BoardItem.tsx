@@ -22,7 +22,7 @@ export default function BoardItem({ board }: { board: Board }) {
   const { setBoards } = useBoards();
 
   const deleteMutation = useMutation({
-    mutationFn: () => deleteBoard(board.id),
+    mutationFn: (id: number) => deleteBoard(id),
     onSuccess: () => {
       setBoards((prevBoards) => prevBoards.filter((b) => b.id !== board.id));
       toast.success("Board deletado com sucesso!");
@@ -44,7 +44,7 @@ export default function BoardItem({ board }: { board: Board }) {
         </CardTitle>
         <div className="flex gap-2">
           <Button
-            onClick={() => deleteMutation.mutate()}
+            onClick={() => deleteMutation.mutate(board.id)}
             variant="destructive"
             size="sm"
             className="cursor-pointer"
