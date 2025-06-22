@@ -28,6 +28,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const boards = await prisma.board.findMany();
+  const tasks = await prisma.task.findMany();
+
+  const boardsWithTasks = boards.map((board) => ({
+    ...board,
+    tasks: tasks.filter((task) => task.boardId === board.id),
+  }));
 
   return (
     <html lang="pt-BR">
@@ -35,7 +41,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
-          <BoardProvider initialBoards={boards}>
+          <BoardProvider initialBoards={boardsWithTasks}>
             <Navbar />
             {children}
           </BoardProvider>

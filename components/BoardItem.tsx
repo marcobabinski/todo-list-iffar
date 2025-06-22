@@ -1,6 +1,5 @@
 "use client";
 
-import { Board } from "@/app/generated/prisma";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import TaskItem from "./TaskItem";
 import TaskItemNew from "./TaskItemNew";
@@ -17,9 +16,11 @@ import { useBoards } from "@/context/BoardsContext";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { deleteBoard } from "@/lib/api/deleteBoard";
+import { BoardWithTasks } from "@/lib/interfaces";
 
-export default function BoardItem({ board }: { board: Board }) {
+export default function BoardItem({ board }: { board: BoardWithTasks }) {
   const { setBoards } = useBoards();
+  const tasks = board.tasks;
 
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteBoard(id),
@@ -63,7 +64,11 @@ export default function BoardItem({ board }: { board: Board }) {
 
       <Card className="w-full max-w-sm shadow-lg border-oil-200">
         <CardContent className="flex flex-col gap-2">
-          <TaskItem task={null} />
+          <ul className="flex flex-col gap-1">
+            {tasks.map((task) => (
+              <TaskItem task={task} key={task.id} />
+            ))}
+          </ul>
           <TaskItemNew />
         </CardContent>
       </Card>
