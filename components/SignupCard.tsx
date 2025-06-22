@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,25 +17,32 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { loginUser } from "@/lib/api/authRoute";
-import { useState } from "react";
+import { createUser } from "@/lib/api/authRoute";
 
-export function LoginCard() {
+interface UserForm {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export function SignupCard() {
   const router = useRouter();
-  const [form, setForm] = useState({
+
+  const [form, setForm] = useState<UserForm>({
+    name: "",
     email: "",
     password: "",
   });
 
-  const loginMutation = useMutation({
-    mutationFn: () => loginUser(form),
+  const CreateAccount = useMutation({
+    mutationFn: () => createUser(form),
     onSuccess: () => {
-      toast.success("Login realizado com sucesso!");
+      toast.success("Cadastro realizado com sucesso!");
       router.refresh();
       router.push("/");
     },
-    onError: (error: Error) => {
-      toast.error(error.message || "Erro ao fazer login");
+    onError: () => {
+      toast.error("Erro ao cadastrar usuário.");
     },
   });
 
@@ -46,46 +55,53 @@ export function LoginCard() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    loginMutation.mutate();
+    CreateAccount.mutate();
   };
 
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle>Entre com sua conta</CardTitle>
-        <CardDescription>
-          Coloque seu email abaixo para acessar sua conta
-        </CardDescription>
+        <CardTitle>Criar conta</CardTitle>
+        <CardDescription>Preencha os campos para se cadastrar</CardDescription>
         <CardAction>
           <Button
-            onClick={() => router.push("/auth/signup")}
             className="cursor-pointer"
             variant="link"
+            onClick={() => router.push("/auth")}
           >
-            Cadastrar-se
+            Já tem conta? Entrar
           </Button>
         </CardAction>
       </CardHeader>
 
       <CardContent>
         <form onSubmit={handleSubmit}>
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="name">Nome</Label>
+              <Input
+                id="name"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 name="email"
                 type="email"
-                placeholder="m@example.com"
                 value={form.email}
                 onChange={handleChange}
                 required
               />
             </div>
+
             <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Senha</Label>
-              </div>
+              <Label htmlFor="password">Senha</Label>
               <Input
                 id="password"
                 name="password"
@@ -101,9 +117,9 @@ export function LoginCard() {
             <Button
               type="submit"
               className="w-full"
-              disabled={loginMutation.isPending}
+              disabled={CreateAccount.isPending}
             >
-              {loginMutation.isPending ? "Entrando..." : "Entrar"}
+              {CreateAccount.isPending ? "Cadastrando..." : "Cadastrar"}
             </Button>
           </CardFooter>
         </form>
