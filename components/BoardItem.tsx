@@ -16,11 +16,47 @@ import { useBoards } from "@/context/BoardsContext";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { deleteBoard } from "@/lib/api/deleteBoard";
+import { createTask } from "@/lib/api/taskRoute";
 import { BoardWithTasks } from "@/lib/interfaces";
+import TaskItemCreateModal from "./TaskItemCreateModal";
+import { useState } from "react";
 
 export default function BoardItem({ board }: { board: BoardWithTasks }) {
   const { setBoards } = useBoards();
   const tasks = board.tasks;
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleCreateTask = (title: string, description: string) => {
+    createTaskMutation.mutate({
+      boardId: board.id,
+      title,
+      description,
+    });
+  };
+
+  const createTaskMutation = useMutation({
+    mutationFn: ({ boardId, title, description }: { boardId: number; title: string; description: string }) => createTask(boardId, title, description),
+    onSuccess: (newTask, variables) => {
+      const { boardId } = variables;
+
+      setBoards((prevBoards) =>
+        prevBoards.map((b) => {
+          if (b.id === boardId) {
+            return {
+              ...b,
+              tasks: [...b.tasks, newTask],
+            };
+          }
+          return b;
+        })
+      );
+
+      toast.success("Task criada com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao criar a task!");
+    },
+  });
 
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteBoard(id),
@@ -69,9 +105,15 @@ export default function BoardItem({ board }: { board: BoardWithTasks }) {
               <TaskItem task={task} key={task.id} />
             ))}
           </ul>
-          <TaskItemNew />
+          <TaskItemNew onClick={() => setOpenModal(true)}/>
         </CardContent>
       </Card>
+
+      <TaskItemCreateModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        onSubmit={handleCreateTask}
+      />
 
       <div className="p-2">
         <p className="text-oil-500 text-xs">Membros da board:</p>
