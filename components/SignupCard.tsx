@@ -41,8 +41,8 @@ export function SignupCard() {
       router.refresh();
       router.push("/");
     },
-    onError: () => {
-      toast.error("Erro ao cadastrar usuário.");
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 
