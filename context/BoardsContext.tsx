@@ -1,5 +1,6 @@
 "use client";
 
+import { BoardWithTasks } from "@/lib/interfaces";
 import {
   createContext,
   useContext,
@@ -8,11 +9,10 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-import { Board } from "@/app/generated/prisma";
 
 interface BoardContextProps {
-  boards: Board[];
-  setBoards: Dispatch<SetStateAction<Board[]>>;
+  boards: BoardWithTasks[];
+  setBoards: Dispatch<SetStateAction<BoardWithTasks[]>>;
 }
 
 const BoardContext = createContext<BoardContextProps | undefined>(undefined);
@@ -22,9 +22,9 @@ export const BoardProvider = ({
   initialBoards,
 }: {
   children: ReactNode;
-  initialBoards: Board[];
+  initialBoards: BoardWithTasks[];
 }) => {
-  const [boards, setBoards] = useState<Board[]>(initialBoards);
+  const [boards, setBoards] = useState<BoardWithTasks[]>(initialBoards);
 
   return (
     <BoardContext.Provider value={{ boards, setBoards }}>
