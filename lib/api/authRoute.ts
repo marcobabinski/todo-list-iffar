@@ -19,7 +19,8 @@ export async function createUser(user: CreateUserDTO): Promise<void> {
   });
 
   if (!res.ok) {
-    throw new Error("Erro ao cadastrar usuário");
+    const errorData = await res.json();
+    throw new Error(errorData.error || "Erro ao cadastrar usuário");
   }
 }
 
