@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     }
 
     const response = NextResponse.json(
-      { message: "Login realizado com sucesso" },
+      { message: "Login realizado com sucesso!" },
       { status: 200 }
     );
 
