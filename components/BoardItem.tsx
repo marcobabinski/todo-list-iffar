@@ -101,7 +101,7 @@ export default function BoardItem({ board }: { board: BoardWithTasks }) {
       <Card className="w-full max-w-sm shadow-lg border-oil-200">
         <CardContent className="flex flex-col gap-2">
           <ul className="flex flex-col gap-1">
-            {tasks.map((task) => (
+            {tasks?.map((task) => (
               <TaskItem task={task} key={task.id} />
             ))}
           </ul>
