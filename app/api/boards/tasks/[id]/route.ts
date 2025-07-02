@@ -1,32 +1,38 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-// --- ATUALIZAR UMA TAREFA (PUT) ---
 export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
     const body = await request.json();
-    const { title } = body;
+    const { title, finished } = body;
 
-    if (!title) {
-      return NextResponse.json(
-        { error: "O campo 'title' é obrigatório" },
+    const dataToUpdate: { title?: string; finished?: boolean } = {};
+
+    if (title) {
+      dataToUpdate.title = title;
+    }
+
+    if (typeof finished === 'boolean') {
+      dataToUpdate.finished = finished;
+    }
+    
+    if (Object.keys(dataToUpdate).length === 0) {
+       return NextResponse.json(
+        { error: "Nenhum dado válido para atualização foi fornecido." },
         { status: 400 }
       );
     }
 
     const updatedTask = await prisma.task.update({
       where: { id: Number(params.id) },
-      data: {
-        title: title,
-      },
+      data: dataToUpdate,
     });
 
     return NextResponse.json(updatedTask);
   } catch (error) {
-    console.error("Erro ao atualizar task:", error);
     return NextResponse.json(
       { error: "Erro ao atualizar task" },
       { status: 500 }
@@ -34,8 +40,6 @@ export async function PUT(
   }
 }
 
-
-// --- DELETAR UMA TAREFA (DELETE) ---
 export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
@@ -44,10 +48,8 @@ export async function DELETE(
     await prisma.task.delete({
       where: { id: Number(params.id) },
     });
-
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    console.error("Erro ao deletar task:", error);
     return NextResponse.json(
       { error: "Erro ao deletar task" },
       { status: 500 }

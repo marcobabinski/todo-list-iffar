@@ -1,0 +1,35 @@
+[33m91046dd[m[33m ([m[1;36mHEAD[m[33m, [m[1;31morigin/dev[m[33m, [m[1;32mfix[m[33m)[m Merge pull request #26 from marcobabinski/feature/gerenciamento
+[33m57ef8bd[m[33m ([m[1;31morigin/feature/gerenciamento[m[33m)[m Merge branch 'dev' into feature/gerenciamento
+[33mf9c11f5[m Merge pull request #25 from marcobabinski/feature/login
+[33m6d1a61c[m[33m ([m[1;31morigin/feature/login[m[33m)[m fix: Adiciona novamente os componentes de login
+[33m36320da[m Merge branch 'dev' into feature/gerenciamento
+[33mbe54484[m Merge pull request #23 from marcobabinski/feat/create-boards
+[33m46c181e[m feat: create boards
+[33m8c907af[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Fix: configuração para buildar independentemente de erros do ESLint
+[33m51b8a71[m Merge branch 'feature/task'
+[33m707277d[m[33m ([m[1;31morigin/feature/task[m[33m)[m Fix: mensagem de erro de cadstro de usuário
+[33m0204d9c[m[33m ([m[1;32mfeature/gerenciamento[m[33m)[m Edição de Task e marcar como concluído
+[33mba5b3c2[m[33m ([m[1;32mfeature/task[m[33m)[m feat: Adicionado create de tasks
+[33m1fd87ff[m feat: Adiciona task dentro do proveider de board e faz o delete de tasks
+[33m6215aef[m Merge pull request #22 from marcobabinski/feature/login
+[33m5a24ea4[m[33m ([m[1;32mmain[m[33m)[m Merge pull request #21 from marcobabinski/revert-20-feature/login
+[33mb730247[m Revert "feat: Adiciona login e cadastro e interação com"
+[33m27e2c1d[m Merge pull request #20 from marcobabinski/feature/login
+[33m0e1075c[m feat: Adiciona login e cadastro e interação com cookies, passando o id do usuário
+[33mbc3e76e[m fix: Atualiza passagem do id do delete
+[33m55d7f78[m feat: Adiciona Provider com reactQuery, context com boards, e chamadas assincronas
+[33m620b0f3[m[33m ([m[1;31morigin/dev-1[m[33m)[m Layout base da tela principal
+[33m616780d[m Configurações de estilização do tailwind
+[33m6f3ab70[m Merge branch 'main' of https://github.com/marcobabinski/todo-list-iffar
+[33m778ed87[m Ajustes de configuração para deploy
+[33me6fb67a[m WIP: Layout da tela principal
+[33maa4dd98[m feat: navbar added
+[33m0ac4a95[m fix: atualização de script para deploy/build
+[33m53173ed[m fix: desativação de regras para o deploy
+[33mcef1ebd[m feat: Adiciona tela de login
+[33ma447726[m feat: Adiciona link banco de dados e projeto
+[33mf7d1f88[m Setup e push do banco
+[33m6062b78[m Esquema de banco inicial
+[33m3defbbd[m ai nao marco
+[33me84d40d[m Setup inicial
+[33me20669d[m Initial commit
