@@ -38,8 +38,12 @@ export async function POST(req: NextRequest) {
     );
 
     response.cookies.set({
-      name: "user_id",
-      value: user.id.toString(),
+      name: "user_data",
+      value: JSON.stringify({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      }),
       httpOnly: true,
       path: "/",
       maxAge: 60 * 60 * 24 * 7,
