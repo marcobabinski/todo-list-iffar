@@ -27,7 +27,7 @@ export default function UserBoards() {
 
       setBoards((prevBoards) => [...prevBoards, newBoard]);
 
-      toast.success("Task criada com sucesso!");
+      toast.success("Board criada com sucesso!");
     },
     onError: () => {
       toast.error("Erro ao criar a task!");
