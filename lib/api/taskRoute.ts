@@ -1,6 +1,10 @@
-import { type Task } from "@prisma/client";
+import { Task } from "@/app/generated/prisma";
 
-export async function createTask(boardId: number, title: string, description: string): Promise<Task> {
+export async function createTask(
+  boardId: number,
+  title: string,
+  description: string
+): Promise<Task> {
   const res = await fetch(`/api/boards/tasks/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -14,7 +18,10 @@ export async function createTask(boardId: number, title: string, description: st
   return data.task;
 }
 
-export async function updateTask(id: number, data: Partial<Pick<Task, 'title' | 'finished'>>): Promise<Task> {
+export async function updateTask(
+  id: number,
+  data: Partial<Pick<Task, "title" | "finished">>
+): Promise<Task> {
   const res = await fetch(`/api/boards/tasks/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -25,7 +32,7 @@ export async function updateTask(id: number, data: Partial<Pick<Task, 'title' | 
     const errorData = await res.json();
     throw new Error(errorData.error || "Erro ao atualizar task");
   }
-  
+
   return res.json();
 }
 

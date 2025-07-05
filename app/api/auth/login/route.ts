@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
 
@@ -22,7 +22,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Comparação segura com bcrypt
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
@@ -32,25 +31,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const response = NextResponse.json(
-      { message: "Login realizado com sucesso" },
-      { status: 200 }
-    );
-
-    response.cookies.set({
-      name: "user_data",
-      value: JSON.stringify({
+    // Retorna os dados do usuário para armazenar no localStorage
+    return NextResponse.json({
+      success: true,
+      user: {
         id: user.id,
         name: user.name,
         email: user.email,
-      }),
-      httpOnly: true,
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-      secure: process.env.NODE_ENV === "production",
+      },
     });
-
-    return response;
   } catch (error) {
     console.error("Erro no login:", error);
     return NextResponse.json(

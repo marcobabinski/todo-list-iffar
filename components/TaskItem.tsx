@@ -20,7 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { deleteTask, updateTask } from "@/lib/api/taskRoute";
-import { useBoards } from "@/context/BoardsContext";
+import { useBoards } from "@/contexts/BoardsContext";
 
 export default function TaskItem({ task }: { task: Task }) {
   const { setBoards } = useBoards();
@@ -35,7 +35,7 @@ export default function TaskItem({ task }: { task: Task }) {
       inputRef.current?.select();
     }
   }, [isEditing]);
-  
+
   const handleUpdateLocalTask = (dataToUpdate: Partial<Task>) => {
     setBoards((prevBoards) =>
       prevBoards.map((board) => {
@@ -74,18 +74,19 @@ export default function TaskItem({ task }: { task: Task }) {
   });
 
   const updateTaskMutation = useMutation({
-    mutationFn: (data: Partial<Pick<Task, 'title' | 'finished'>>) => updateTask(task.id, data),
+    mutationFn: (data: Partial<Pick<Task, "title" | "finished">>) =>
+      updateTask(task.id, data),
     onSuccess: (updatedTask) => {
       handleUpdateLocalTask(updatedTask);
       toast.success("Task atualizada com sucesso!");
       if (updatedTask.title) {
-          setIsEditing(false);
+        setIsEditing(false);
       }
     },
     onError: (error: Error, variables) => {
       toast.error(`Erro ao atualizar a task: ${error.message}`);
       handleUpdateLocalTask({ title: task.title, finished: task.finished });
-      if(variables.title) {
+      if (variables.title) {
         setIsEditing(false);
       }
     },
@@ -102,9 +103,9 @@ export default function TaskItem({ task }: { task: Task }) {
   };
 
   const handleToggleFinished = (newStatus: boolean) => {
-     handleUpdateLocalTask({ finished: newStatus });
-     updateTaskMutation.mutate({ finished: newStatus });
-  }
+    handleUpdateLocalTask({ finished: newStatus });
+    updateTaskMutation.mutate({ finished: newStatus });
+  };
 
   return (
     <li className="w-full inline-flex items-center justify-between gap-2 group">
@@ -116,29 +117,33 @@ export default function TaskItem({ task }: { task: Task }) {
         aria-label="Marcar tarefa como concluída"
       />
       <label htmlFor={`task-${task.id}`} className="flex-grow">
-          <Input
-            ref={inputRef}
-            value={currentTitle}
-            onChange={(e) => setCurrentTitle(e.target.value)}
-            readOnly={!isEditing}
-            onBlur={handleTitleSaveChanges}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleTitleSaveChanges();
-              if (e.key === "Escape") {
-                setCurrentTitle(task.title);
-                setIsEditing(false);
-              }
-            }}
-            className={`
+        <Input
+          ref={inputRef}
+          value={currentTitle}
+          onChange={(e) => setCurrentTitle(e.target.value)}
+          readOnly={!isEditing}
+          onBlur={handleTitleSaveChanges}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleTitleSaveChanges();
+            if (e.key === "Escape") {
+              setCurrentTitle(task.title);
+              setIsEditing(false);
+            }
+          }}
+          className={`
               hover:border-slate-300 shadow-none transition-all w-full
-              ${isEditing ? "border-primary bg-background" : "border-transparent bg-transparent"}
+              ${
+                isEditing
+                  ? "border-primary bg-background"
+                  : "border-transparent bg-transparent"
+              }
               ${task.finished ? "line-through text-muted-foreground" : ""}
             `}
-            disabled={updateTaskMutation.isPending || task.finished}
-          />
+          disabled={updateTaskMutation.isPending || task.finished}
+        />
       </label>
 
-      {(updateTaskMutation.isPending && !isEditing) ? (
+      {updateTaskMutation.isPending && !isEditing ? (
         <Loader2 className="h-5 w-5 animate-spin text-primary" />
       ) : (
         <div className="flex items-center gap-1">
@@ -148,7 +153,11 @@ export default function TaskItem({ task }: { task: Task }) {
             className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
             onClick={() => setIsEditing(true)}
             aria-label="Editar tarefa"
-            disabled={task.finished || updateTaskMutation.isPending || deleteMutation.isPending}
+            disabled={
+              task.finished ||
+              updateTaskMutation.isPending ||
+              deleteMutation.isPending
+            }
           >
             <Pencil className="h-4 w-4" />
           </Button>
@@ -182,7 +191,9 @@ export default function TaskItem({ task }: { task: Task }) {
                   onClick={() => deleteMutation.mutate()}
                   disabled={deleteMutation.isPending}
                 >
-                  {deleteMutation.isPending ? "Apagando..." : "Sim, quero apagar"}
+                  {deleteMutation.isPending
+                    ? "Apagando..."
+                    : "Sim, quero apagar"}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import BoardItem from "./BoardItem";
 import BoardItemNew from "./BoardItemNew";
-import { useBoards } from "@/context/BoardsContext";
+import { useBoards } from "@/contexts/BoardsContext";
 import BoardCreateModal from "./BoardCreateModal";
 import { useMutation } from "@tanstack/react-query";
 import { createBoard } from "@/lib/api/boardRoute";
@@ -21,13 +21,11 @@ export default function UserBoards() {
   };
 
   const createBoardMutation = useMutation({
-    mutationFn: ({title}: {title: string;}) => createBoard(title),
+    mutationFn: ({ title }: { title: string }) => createBoard(title),
     onSuccess: (newBoard) => {
-      newBoard.task = []
+      newBoard.task = [];
 
-      setBoards((prevBoards) =>
-        [...prevBoards, newBoard]
-      )
+      setBoards((prevBoards) => [...prevBoards, newBoard]);
 
       toast.success("Task criada com sucesso!");
     },
@@ -50,5 +48,4 @@ export default function UserBoards() {
       />
     </div>
   );
-
 }

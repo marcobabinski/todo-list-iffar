@@ -9,12 +9,20 @@ export async function deleteTask(id: number): Promise<void> {
 }
 
 export async function createBoard(title: string) {
-  const res = await fetch(`/api/boards/`, {
+  // Obtenha o usuário do localStorage
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+
+  if (!user) {
+    throw new Error("Usuário não autenticado");
+  }
+
+  const res = await fetch("/api/boards", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "x-user-id": user.id.toString(), // Envie o ID do usuário no header
     },
-    body: JSON.stringify({title}),
+    body: JSON.stringify({ title }),
   });
 
   if (!res.ok) {

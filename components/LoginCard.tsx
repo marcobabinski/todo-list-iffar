@@ -17,9 +17,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginUser } from "@/lib/api/authRoute";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function LoginCard() {
   const router = useRouter();
+  const { login } = useAuth();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -27,9 +29,9 @@ export function LoginCard() {
 
   const loginMutation = useMutation({
     mutationFn: () => loginUser(form),
-    onSuccess: () => {
+    onSuccess: (userData) => {
+      login(userData);
       toast.success("Login realizado com sucesso!");
-      router.refresh();
       router.push("/");
     },
     onError: (error: Error) => {
