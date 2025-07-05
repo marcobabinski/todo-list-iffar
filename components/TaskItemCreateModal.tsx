@@ -66,11 +66,11 @@ export default function TaskModal({ open, onClose, onSubmit }: TaskModalProps) {
             </p>
           )}
 
-          <Textarea
+          {/* <Textarea
             placeholder="Descrição da task (opcional)"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-          />
+          /> */}
         </div>
 
         <DialogFooter>
