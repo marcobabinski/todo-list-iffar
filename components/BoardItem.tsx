@@ -100,9 +100,6 @@ export default function BoardItem({ board }: { board: BoardWithTasks }) {
               <Trash />
             )}
           </Button>
-          <Button variant="default" size="sm" className="cursor-pointer">
-            <Pin />
-          </Button>
         </div>
       </CardHeader>
 
