@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,17 +17,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createUser } from "@/lib/api/authRoute";
-
-interface UserForm {
-  name: string;
-  email: string;
-  password: string;
-}
+import { useAuth } from "@/contexts/AuthContext";
 
 export function SignupCard() {
   const router = useRouter();
-
-  const [form, setForm] = useState<UserForm>({
+  const { login } = useAuth();
+  const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
@@ -36,13 +30,13 @@ export function SignupCard() {
 
   const CreateAccount = useMutation({
     mutationFn: () => createUser(form),
-    onSuccess: () => {
+    onSuccess: (userData) => {
+      login(userData);
       toast.success("Cadastro realizado com sucesso!");
-      router.refresh();
       router.push("/");
     },
-    onError: () => {
-      toast.error("Erro ao cadastrar usuário.");
+    onError: (error: Error) => {
+      toast.error(error.message || "Erro ao cadastrar usuário.");
     },
   });
 

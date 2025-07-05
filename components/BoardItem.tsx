@@ -12,7 +12,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Trash, Pin, UserPlus2, Loader2 } from "lucide-react";
-import { useBoards } from "@/context/BoardsContext";
+import { useBoards } from "@/contexts/BoardsContext";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { deleteBoard } from "@/lib/api/deleteBoard";
@@ -35,7 +35,15 @@ export default function BoardItem({ board }: { board: BoardWithTasks }) {
   };
 
   const createTaskMutation = useMutation({
-    mutationFn: ({ boardId, title, description }: { boardId: number; title: string; description: string }) => createTask(boardId, title, description),
+    mutationFn: ({
+      boardId,
+      title,
+      description,
+    }: {
+      boardId: number;
+      title: string;
+      description: string;
+    }) => createTask(boardId, title, description),
     onSuccess: (newTask, variables) => {
       const { boardId } = variables;
 
@@ -105,7 +113,7 @@ export default function BoardItem({ board }: { board: BoardWithTasks }) {
               <TaskItem task={task} key={task.id} />
             ))}
           </ul>
-          <TaskItemNew onClick={() => setOpenModal(true)}/>
+          <TaskItemNew onClick={() => setOpenModal(true)} />
         </CardContent>
       </Card>
 
