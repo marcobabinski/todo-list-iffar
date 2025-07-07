@@ -50,10 +50,17 @@ export default function BoardItem({ board }: { board: BoardWithTasks }) {
       setBoards((prevBoards) =>
         prevBoards.map((b) => {
           if (b.id === boardId) {
-            return {
-              ...b,
-              tasks: [...b.tasks, newTask],
-            };
+            if(b.tasks){
+              return {
+                ...b,
+                tasks: [...b.tasks, newTask],
+              };
+            } else {
+              return {
+                ...b,
+                tasks: [newTask],
+              };
+            }
           }
           return b;
         })
@@ -68,8 +75,8 @@ export default function BoardItem({ board }: { board: BoardWithTasks }) {
 
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteBoard(id),
-    onSuccess: () => {
-      setBoards((prevBoards) => prevBoards.filter((b) => b.id !== board.id));
+    onSuccess: (id) => {
+      setBoards((prevBoards) => prevBoards.filter((b) => b.id !== id));
       toast.success("Board deletado com sucesso!");
     },
     onError: () => {

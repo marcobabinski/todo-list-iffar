@@ -1,7 +1,8 @@
 "use client";
 
+import { useAuth } from "@/contexts/AuthContext";
 import { BoardProvider } from "@/contexts/BoardsContext";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { BoardWithTasks } from "@/lib/interfaces";
 
@@ -10,42 +11,26 @@ export function ClientBoardProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [boards, setBoards] = useState<BoardWithTasks[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
 
-  useEffect(() => {
-    async function loadUserBoards() {
-      try {
-        const user = JSON.parse(localStorage.getItem("user") || "null");
+  const {
+    data: boards = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery<BoardWithTasks[], Error>({
+    queryKey: ["boards", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const res = await fetch(`/api/boards/user/${user.id}`);
+      if (!res.ok) throw new Error("Erro ao carregar boards");
+      return res.json();
+    },
+    enabled: !!user?.id, 
+    staleTime: 1000 * 60, 
+  });
 
-        if (!user?.id) {
-          setBoards([]);
-          return;
-        }
-
-        const response = await fetch(`/api/boards/user/${user.id}`);
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch boards");
-        }
-
-        const userBoards = await response.json();
-        setBoards(userBoards);
-        setError(null);
-      } catch (err) {
-        console.error("Failed to load user boards:", err);
-        setError(err instanceof Error ? err.message : "Unknown error");
-        setBoards([]);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadUserBoards();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -53,10 +38,10 @@ export function ClientBoardProvider({
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p className="text-red-500">Error: {error}</p>
+        <p className="text-red-500">Erro: {error?.message}</p>
       </div>
     );
   }

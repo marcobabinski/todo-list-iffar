@@ -9,6 +9,7 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import { User } from "@/lib/interfaces";
+import { useQueryClient } from "@tanstack/react-query"; 
 
 interface AuthContextType {
   user: User | null;
@@ -23,6 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const queryClient = useQueryClient(); 
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -43,12 +45,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = (userData: User) => {
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
-    router.refresh();
+
+    queryClient.invalidateQueries({ queryKey: ["boards"] });
+
+    router.refresh(); 
   };
 
   const logout = () => {
     localStorage.removeItem("user");
     setUser(null);
+
+    queryClient.clear();
+
     router.push("/auth");
     router.refresh();
   };
