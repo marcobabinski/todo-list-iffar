@@ -1,4 +1,4 @@
-export async function deleteBoard(id: number): Promise<void> {
+export async function deleteBoard(id: number){
   const res = await fetch(`/api/boards/${id}`, {
     method: "DELETE",
   });
@@ -6,4 +6,7 @@ export async function deleteBoard(id: number): Promise<void> {
   if (!res.ok) {
     throw new Error("Erro ao deletar board");
   }
+
+  const data = await res.json();
+  return data.id;
 }
