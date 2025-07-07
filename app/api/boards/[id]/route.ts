@@ -31,3 +31,38 @@ export async function DELETE(
     );
   }
 }
+
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const body = await request.json();
+    const { title } = body;
+
+    const dataToUpdate: { title?: string} = {};
+
+    if (title) {
+      dataToUpdate.title = title;
+    }
+    
+    if (Object.keys(dataToUpdate).length === 0) {
+       return NextResponse.json(
+        { error: "Nenhum dado válido para atualização foi fornecido." },
+        { status: 400 }
+      );
+    }
+
+    const updatedBoard = await prisma.board.update({
+      where: { id: Number(params.id) },
+      data: dataToUpdate,
+    });
+
+    return NextResponse.json(updatedBoard);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Erro ao atualizar o board" },
+      { status: 500 }
+    );
+  }
+}

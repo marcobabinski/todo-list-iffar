@@ -1,3 +1,5 @@
+import { Board } from "@/app/generated/prisma";
+
 export async function deleteTask(id: number): Promise<void> {
   const res = await fetch(`/api/boards/${id}`, {
     method: "DELETE",
@@ -31,4 +33,22 @@ export async function createBoard(title: string) {
 
   const data = await res.json();
   return data.board;
+}
+
+export async function updateBoard(
+  id: number,
+  data: Partial<Pick<Board, "title">>
+): Promise<Board> {
+  const res = await fetch(`/api/boards/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.error || "Erro ao atualizar o board");
+  }
+
+  return res.json();
 }
