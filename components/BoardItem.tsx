@@ -100,9 +100,6 @@ export default function BoardItem({ board }: { board: BoardWithTasks }) {
               <Trash />
             )}
           </Button>
-          <Button variant="default" size="sm" className="cursor-pointer">
-            <Pin />
-          </Button>
         </div>
       </CardHeader>
 
@@ -122,29 +119,6 @@ export default function BoardItem({ board }: { board: BoardWithTasks }) {
         onClose={() => setOpenModal(false)}
         onSubmit={handleCreateTask}
       />
-
-      <div className="p-2">
-        <p className="text-oil-500 text-xs">Membros da board:</p>
-        <div className="flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background">
-          {["shadcn", "leerob", "evilrabbit"].map((user, index) => (
-            <Avatar key={index}>
-              <AvatarImage
-                src={`https://github.com/${user}.png`}
-                alt={`@${user}`}
-              />
-              <AvatarFallback>{user.slice(0, 2).toUpperCase()}</AvatarFallback>
-            </Avatar>
-          ))}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Avatar className="bg-old-lace-200 text-old-lace-500 outline-2 outline-old-lace-50 flex items-center justify-center hover:-translate-y-1 transition-all cursor-pointer">
-                <UserPlus2 size={18} />
-              </Avatar>
-            </TooltipTrigger>
-            <TooltipContent>Adicionar usuário</TooltipContent>
-          </Tooltip>
-        </div>
-      </div>
     </div>
   );
 }

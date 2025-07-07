@@ -11,9 +11,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
+import Rand, { PRNG } from 'rand-seed';
+
+// const random = require('seeded-random');
 
 export function Navbar() {
   const { user, logout } = useAuth();
+
+  const rand = new Rand(user?.email || "placeholder");
+
+  function userBackgroundColorPicker(seed: string) {
+    const colors = ["bg-[#FFCBE1]", "bg-[#D6E5BD]", "bg-[#F9E1A8]", "bg-[#BCD8EC]", "bg-[#DCCCEC]", "bg-[#FFDAB4]"];
+    const pickedColor = Math.floor(rand.next() * colors.length);
+
+    return colors[pickedColor]
+  }
+
+  const userBackgroundColor = userBackgroundColorPicker(user?.email || "placeholder")
 
   return (
     <nav className="w-full flex items-center justify-between px-4 py-2 pb-4 border-b bg-oil-900 relative">
@@ -32,17 +46,19 @@ export function Navbar() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
               <Avatar className="h-8 w-8">
-                <AvatarImage
+                {/* <AvatarImage
                   src={"https://github.com/shadcn.png"}
                   alt="Avatar"
-                />
-                <AvatarFallback>
+                /> */}
+                <AvatarFallback className={`${userBackgroundColor} text-black font-semibold text-lg`}>
                   {user.name ? user.name.charAt(0).toUpperCase() : "U"}
                 </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end" forceMount>
+          <DropdownMenuContent className="w-56 p-2 flex flex-col gap-2" align="end" forceMount>
+            <p className="text-sm font-semibold px-2">{ user.name ? user.name : user.email }</p>
+            <hr />
             <DropdownMenuItem
               className="flex items-center gap-2"
               onClick={logout}
